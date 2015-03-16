@@ -53,5 +53,32 @@ public class LogEntry {
 	public String getMessage() {
 		return message;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s - %s - %s", revision, author, message);
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null)
+			return false;
+	    if(!(obj instanceof LogEntry))
+	    	return false;
+	    
+		LogEntry another = (LogEntry) obj;
+		
+		return revision.equals(another.revision) &&
+				author.equals(another.author) &&
+				date.equals(another.date) &&
+				message.equals(another.message);
+	}
+	
+	@Override
+	public int hashCode() {
+		return revision.hashCode() *
+				author.hashCode() *
+				date.hashCode() *
+				message.hashCode();
+	}
 }
