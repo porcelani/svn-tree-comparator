@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class TreeComparatorTest {
+public class SVNTreeComparatorTest {
 
 	@Test
 	public void compareEqualTrees() {
