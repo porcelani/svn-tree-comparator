@@ -24,19 +24,19 @@ public class LogEntryTest {
 
 	@Test
 	public void marshall() {
-		LogEntry subject = new LogEntry();
+		Commit subject = new Commit();
 		subject.setRevision("1");
 		subject.setAuthor("someone");
 		subject.setDate("2014-12-29T16:07:09.712879Z");
 		subject.setMessage("first commit");
 		
-		String out = marshall(LogEntry.class, subject);
+		String out = marshall(Commit.class, subject);
 		assertThat(out, equalTo(expected));
 	}
 	
 	@Test
 	public void unmarshall() {
-		LogEntry logEntry = unmarshall(LogEntry.class, expected);
+		Commit logEntry = unmarshall(Commit.class, expected);
 		
 		assertThat(logEntry.getRevision(), equalTo("1"));
 		assertThat(logEntry.getAuthor(), equalTo("someone"));

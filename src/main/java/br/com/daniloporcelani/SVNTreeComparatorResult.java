@@ -5,18 +5,17 @@ import java.util.List;
 
 public class SVNTreeComparatorResult {
 
-	private List<LogEntry> commits = new ArrayList<LogEntry>();
+	private List<Commit> commits = new ArrayList<Commit>();
+
+	public SVNTreeComparatorResult(List<Commit> commits) {
+		this.commits = commits;
+	}
 
 	public boolean areEquals() {
 		return commits.isEmpty();
 	}
 
-	public List<LogEntry> commitsOnlyOnSource() {
+	public List<Commit> commitsOnlyOnSource() {
 		return commits;
 	}
-
-	public void add(LogEntry entry) {
-		commits.add(entry);
-	}
-
 }

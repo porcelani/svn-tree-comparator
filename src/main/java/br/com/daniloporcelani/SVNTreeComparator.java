@@ -1,23 +1,31 @@
 package br.com.daniloporcelani;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SVNTreeComparator {
 
-	private List<LogEntry> subject;
+	private final List<Commit> source;
 
-	public SVNTreeComparator(List<LogEntry> tree) {
-		subject = tree;
+	public SVNTreeComparator(List<Commit> source) {
+		this.source = source;
 	}
 
-	public SVNTreeComparatorResult compare(List<LogEntry> target) {
-		SVNTreeComparatorResult result = new SVNTreeComparatorResult();
+	public SVNTreeComparatorResult compare(List<Commit> target) {
+		List<Commit> commitsOnlyOnSource = new ArrayList<Commit>(source);
 		
-		for(LogEntry entry : subject)
-			if(!target.contains(entry))
-				result.add(entry);
+		for(Commit c : source)
+			if(c.getAuthor().equals("builder"))
+				commitsOnlyOnSource.remove(c);
 		
-		return result;
+		for(Commit t : target)
+			for(Commit c : source)
+				if(t.getMessage().equals(c.getMessage())) {
+					commitsOnlyOnSource.remove(c);
+					break;
+				}
+		
+		return new SVNTreeComparatorResult(commitsOnlyOnSource);
 	}
 
 }

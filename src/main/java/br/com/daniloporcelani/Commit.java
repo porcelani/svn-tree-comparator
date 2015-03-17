@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "logentry")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlAccessorOrder(XmlAccessOrder.ALPHABETICAL)
-public class LogEntry {
+public class Commit {
 
 	@XmlAttribute
 	private String revision;
@@ -63,10 +63,10 @@ public class LogEntry {
 	public boolean equals(Object obj) {
 		if(obj == null)
 			return false;
-	    if(!(obj instanceof LogEntry))
+	    if(!(obj instanceof Commit))
 	    	return false;
 	    
-		LogEntry another = (LogEntry) obj;
+		Commit another = (Commit) obj;
 		
 		return revision.equals(another.revision) &&
 				author.equals(another.author) &&
