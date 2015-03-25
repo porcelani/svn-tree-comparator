@@ -1,11 +1,14 @@
 package br.com.daniloporcelani;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessOrder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "logentry")
@@ -21,6 +24,10 @@ public class Commit {
 	
 	@XmlElement(name = "msg")
 	private String message;
+	
+	@XmlElement(name = "path")
+	@XmlElementWrapper(name = "paths")
+	private List<Path> paths;
 
 	public void setRevision(String revision) {
 		this.revision = revision;
@@ -54,31 +61,16 @@ public class Commit {
 		return message;
 	}
 	
-	@Override
-	public String toString() {
-		return String.format("%s - %s - %s", revision, author, message);
+	public void setPaths(List<Path> paths) {
+		this.paths = paths;
+	}
+
+	public List<Path> getPaths() {
+		return paths;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if(obj == null)
-			return false;
-	    if(!(obj instanceof Commit))
-	    	return false;
-	    
-		Commit another = (Commit) obj;
-		
-		return revision.equals(another.revision) &&
-				author.equals(another.author) &&
-				date.equals(another.date) &&
-				message.equals(another.message);
-	}
-	
-	@Override
-	public int hashCode() {
-		return revision.hashCode() *
-				author.hashCode() *
-				date.hashCode() *
-				message.hashCode();
+	public String toString() {
+		return String.format("%s - %s - %s", revision, author, message);
 	}
 }
