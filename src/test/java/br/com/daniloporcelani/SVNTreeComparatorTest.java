@@ -1,5 +1,6 @@
 package br.com.daniloporcelani;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -100,13 +101,49 @@ public class SVNTreeComparatorTest {
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
 	}
+	
+	@Test
+	public void differentMessagesButWithSameIssueAndSamePath() {
+		Path classe1 = new Path();
+		classe1.setAction("M");
+		classe1.setKind("");
+		classe1.setPath("/path/to/class/MyClass.java");
+		classe1.setPropMods("");
+		classe1.setTextMods("");
 
+		Path classe2 = new Path();
+		classe2.setAction("M");
+		classe2.setKind("");
+		classe2.setPath("/path/to/class/MyClass.java");
+		classe2.setPropMods("");
+		classe2.setTextMods("");
+		
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[message] 1", asList(classe1));
+		
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[message] 2", asList(classe2));
+		
+		List<Commit> source = Arrays.asList(logEntry1);
+		List<Commit> target = Arrays.asList(logEntry2);
+		
+		SVNTreeComparator comparator = new SVNTreeComparator(source);
+		SVNTreeComparatorResult result = comparator.compare(target);
+		
+		assertThat(result.areEquals(), is(true));
+		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
+	}
+	
 	private Commit newLogEntry(String revision, String author, String date, String message) {
 		Commit logEntry = new Commit();
 		logEntry.setRevision(revision);
 		logEntry.setAuthor(author);
 		logEntry.setDate(date);
 		logEntry.setMessage(message);
+		return logEntry;
+	}
+	
+	private Commit newLogEntry(String revision, String author, String date, String message, List<Path> paths) {
+		Commit logEntry = newLogEntry( revision, author,date, message);
+		logEntry.setPaths(paths);
 		return logEntry;
 	}
 }

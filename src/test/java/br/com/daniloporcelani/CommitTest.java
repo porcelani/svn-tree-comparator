@@ -56,7 +56,7 @@ public class CommitTest {
 	
 	@Test
 	public void unmarshall() {
-		Commit logEntry = unmarshall(Commit.class, expected);
+		Commit logEntry = unmarshall(expected);
 		
 		assertThat(logEntry.getRevision(), equalTo("1"));
 		assertThat(logEntry.getAuthor(), equalTo("someone"));
@@ -67,12 +67,13 @@ public class CommitTest {
 		assertThat(logEntry.getPaths().get(1).getPath(), equalTo("/Class2.java"));
 	}
 	
-	@SuppressWarnings("unchecked")
-	private static <T> T unmarshall(Class<T> clazz, String xml) {
+	private static Commit unmarshall(String xml) {
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Commit.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			return (T) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes()));
+			Commit unmarshal = (Commit) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes()));
+
+			return unmarshal;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

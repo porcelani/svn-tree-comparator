@@ -64,4 +64,11 @@ public class Path {
 	public void setPath(String path) {
 		this.path = path;
 	}
+
+	public String getFileName() {
+		int lastSlash = path.lastIndexOf('/');
+		int lastDot = path.lastIndexOf('.');
+		return path.substring(lastSlash, lastDot);
+	}
+
 }
