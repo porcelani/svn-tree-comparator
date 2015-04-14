@@ -103,27 +103,31 @@ public class SVNTreeComparatorTest {
 	}
 	
 	@Test
-	public void differentMessagesButWithSameIssueAndSamePath() {
-		Path classe1 = new Path();
-		classe1.setAction("M");
-		classe1.setKind("");
-		classe1.setPath("/path/to/class/MyClass.java");
-		classe1.setPropMods("");
-		classe1.setTextMods("");
+	public void differentMessagesButWithSameTagAndSamePath() {
 
-		Path classe2 = new Path();
-		classe2.setAction("M");
-		classe2.setKind("");
-		classe2.setPath("/path/to/class/MyClass.java");
-		classe2.setPropMods("");
-		classe2.setTextMods("");
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] Message 1", asList(myClass1()));
 		
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[message] 1", asList(classe1));
-		
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[message] 2", asList(classe2));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag] Message 2", asList(myClass1B()));
 		
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
+		
+		SVNTreeComparator comparator = new SVNTreeComparator(source);
+		SVNTreeComparatorResult result = comparator.compare(target);
+		
+		assertThat(result.areEquals(), is(true));
+		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
+	}
+	
+	@Test
+	public void Bla() {		
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] Message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 1", "date 2", "[tag] Message 1", asList(myClass2()));
+		
+		Commit logEntry3 = newLogEntry("3", "author 2", "date 3", "[tag] Message 2", asList(myClass1B(),myClass2B()));
+		
+		List<Commit> source = Arrays.asList(logEntry1,logEntry2);
+		List<Commit> target = Arrays.asList(logEntry3);
 		
 		SVNTreeComparator comparator = new SVNTreeComparator(source);
 		SVNTreeComparatorResult result = comparator.compare(target);
@@ -145,5 +149,45 @@ public class SVNTreeComparatorTest {
 		Commit logEntry = newLogEntry( revision, author,date, message);
 		logEntry.setPaths(paths);
 		return logEntry;
+	}
+
+	private Path myClass1() {
+		Path classe1 = new Path();
+		classe1.setAction("M");
+		classe1.setKind("");
+		classe1.setPath("/path/to/class/MyClass.java");
+		classe1.setPropMods("");
+		classe1.setTextMods("");
+		return classe1;
+	}
+
+	private Path myClass1B() {
+		Path classe1 = new Path();
+		classe1.setAction("M");
+		classe1.setKind("");
+		classe1.setPath("/path/to/class/MyClass.java");
+		classe1.setPropMods("");
+		classe1.setTextMods("");
+		return classe1;
+	}
+	
+	private Path myClass2() {
+		Path classe1 = new Path();
+		classe1.setAction("M");
+		classe1.setKind("");
+		classe1.setPath("/path/to/class/MySecundClass.java");
+		classe1.setPropMods("");
+		classe1.setTextMods("");
+		return classe1;
+	}
+
+	private Path myClass2B() {
+		Path classe1 = new Path();
+		classe1.setAction("M");
+		classe1.setKind("");
+		classe1.setPath("/path/to/class/MySecundClass.java");
+		classe1.setPropMods("");
+		classe1.setTextMods("");
+		return classe1;
 	}
 }
