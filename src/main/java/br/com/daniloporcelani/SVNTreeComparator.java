@@ -65,28 +65,19 @@ public class SVNTreeComparator {
 		return new SVNTreeComparatorResult(commitsOnlyOnSource);
 	}
 
+	private boolean hasSameTag(Commit t, Commit c) {
+		String tagT=getTag(t);
+		String tagC=getTag(c);
+
+		return tagT.equals(tagC);
+	}
+
 	private String getTag(Commit t) {
 		String message = t.getMessage();
 		int indexOf = message.indexOf('[');
 		int indexOf2 = message.indexOf(']');
+				
 		return message.substring(indexOf + 1, indexOf2);
-	}
-	
-	private boolean hasSameTag(Commit t, Commit c) {
-		String messageT = t.getMessage();
-		String messageC = c.getMessage();
-
-		int indexOf = messageT.indexOf('[');
-		int indexOf2 = messageT.indexOf(']');
-		int indexOf3 = messageC.indexOf('[');
-		int indexOf4 = messageC.indexOf(']');
-
-		if (indexOf == -1 || indexOf2 == -1 || indexOf3 == -1 || indexOf4 == -1)
-			return false;
-
-		String textT = messageT.substring(indexOf, indexOf2);
-		String textC = messageC.substring(indexOf3, indexOf4);
-		return textT.equals(textC);
 	}
 
 	private boolean pathEquals(Commit t, Commit c) {
