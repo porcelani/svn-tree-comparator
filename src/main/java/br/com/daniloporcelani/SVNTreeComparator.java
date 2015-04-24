@@ -2,6 +2,8 @@ package br.com.daniloporcelani;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SVNTreeComparator {
 
@@ -74,10 +76,15 @@ public class SVNTreeComparator {
 
 	private String getTag(Commit t) {
 		String message = t.getMessage();
-		int indexOf = message.indexOf('[');
-		int indexOf2 = message.indexOf(']');
-				
-		return message.substring(indexOf + 1, indexOf2);
+		
+		String oneOrMoreCaracter = "\\S+";
+		String oneOrMoreNumber = "\\d+";
+		Matcher matcher = Pattern.compile("\\["+oneOrMoreCaracter+"-"+oneOrMoreNumber+"\\]").matcher(message);
+		
+		if(!matcher.find())
+			throw new RuntimeException("The menssage need a Tag");
+	
+		return matcher.group();
 	}
 
 	private boolean pathEquals(Commit t, Commit c) {

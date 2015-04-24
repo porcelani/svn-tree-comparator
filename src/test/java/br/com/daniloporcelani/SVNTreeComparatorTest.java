@@ -14,13 +14,13 @@ public class SVNTreeComparatorTest {
 
 	@Test
 	public void compareEqualTrees() {
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag1] message 1", asList(myClass1()));
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag2] message 2", asList(myClass1()));
-		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[tag3] message 3", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-2] message 2", asList(myClass1()));
+		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[PROJ-3] message 3", asList(myClass1()));
 
-		Commit logEntry4 = newLogEntry("1", "author 1", "date 1", "[tag1] message 1", asList(myClass1()));
-		Commit logEntry5 = newLogEntry("2", "author 2", "date 2", "[tag2] message 2", asList(myClass1()));
-		Commit logEntry6 = newLogEntry("3", "author 3", "date 3", "[tag3] message 3", asList(myClass1()));
+		Commit logEntry4 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry5 = newLogEntry("2", "author 2", "date 2", "[PROJ-2] message 2", asList(myClass1()));
+		Commit logEntry6 = newLogEntry("3", "author 3", "date 3", "[PROJ-3] message 3", asList(myClass1()));
 		
 		List<Commit> source = Arrays.asList(logEntry1, logEntry2, logEntry3);
 		List<Commit> target = Arrays.asList(logEntry4, logEntry5, logEntry6);
@@ -34,13 +34,13 @@ public class SVNTreeComparatorTest {
 	
 	@Test
 	public void compareDifferentTrees() {
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag1] message 1", asList(myClass1()));
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag2] message 2", asList(myClass1()));
-		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[tag3] message 3", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-2] message 2", asList(myClass1()));
+		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[PROJ-3] message 3", asList(myClass1()));
 
-		Commit logEntry4 = newLogEntry("1", "author 1", "date 1", "[tag1] message 1", asList(myClass1()));
-		Commit logEntry5 = newLogEntry("2", "author 2", "date 2", "[tag2] message 2", asList(myClass1()));
-		Commit logEntry6 = newLogEntry("4", "author 4", "date 4", "[tag4] message 4", asList(myClass1()));
+		Commit logEntry4 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry5 = newLogEntry("2", "author 2", "date 2", "[PROJ-2] message 2", asList(myClass1()));
+		Commit logEntry6 = newLogEntry("4", "author 4", "date 4", "[PROJ-4] message 4", asList(myClass1()));
 		
 		List<Commit> source = Arrays.asList(logEntry1, logEntry2, logEntry3);
 		List<Commit> target = Arrays.asList(logEntry4, logEntry5, logEntry6);
@@ -55,9 +55,9 @@ public class SVNTreeComparatorTest {
 
 	@Test
 	public void treesWithSameMessageAreEquals() {
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] message 1", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
 
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag] message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-1] message 1", asList(myClass1()));
 		
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
@@ -71,9 +71,9 @@ public class SVNTreeComparatorTest {
 
 	@Test
 	public void treesWithSameMessageButDifferentQuantityOfCommitsAreNotEquals() {
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] message 1", asList(myClass1()));
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag] message 1", asList(myClass2()));
-		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[tag] message 1", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-1] message 1", asList(myClass2()));
+		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[PROJ-1] message 1", asList(myClass1()));
 		
 		List<Commit> source = Arrays.asList(logEntry1, logEntry3);
 		
@@ -89,9 +89,9 @@ public class SVNTreeComparatorTest {
 
 	@Test
 	public void treesWithSameMessageButDifferentQuantityOfCommitsOnTargetAreEquals() {
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] message 1", asList(myClass1()));
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag] message 1", asList(myClass1()));
-		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[tag] message 1", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-1] message 1", asList(myClass1()));
+		Commit logEntry3 = newLogEntry("3", "author 3", "date 3", "[PROJ-1] message 1", asList(myClass1()));
 		
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2, logEntry3);
@@ -106,9 +106,9 @@ public class SVNTreeComparatorTest {
 	@Test
 	public void differentMessagesButWithSameTagAndSamePath() {
 
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] Message 1", asList(myClass1()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] Message 1", asList(myClass1()));
 		
-		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[tag] Message 2", asList(myClass1B()));
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[PROJ-1] Message 2", asList(myClass1B()));
 		
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
@@ -122,10 +122,10 @@ public class SVNTreeComparatorTest {
 	
 	@Test
 	public void differentMessagesButWithSameTagAndSamePathWithTwoCommits() {		
-		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[tag] Message 1", asList(myClass1()));
-		Commit logEntry2 = newLogEntry("2", "author 1", "date 2", "[tag] Message 1", asList(myClass2()));
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[PROJ-1] Message 1", asList(myClass1()));
+		Commit logEntry2 = newLogEntry("2", "author 1", "date 2", "[PROJ-1] Message 1", asList(myClass2()));
 		
-		Commit logEntry3 = newLogEntry("3", "author 2", "date 3", "[tag] Message 2", asList(myClass1B(),myClass2B()));
+		Commit logEntry3 = newLogEntry("3", "author 2", "date 3", "[PROJ-1] Message 2", asList(myClass1B(),myClass2B()));
 		
 		List<Commit> source = Arrays.asList(logEntry1,logEntry2);
 		List<Commit> target = Arrays.asList(logEntry3);
@@ -136,6 +136,23 @@ public class SVNTreeComparatorTest {
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
 	}
+	
+	@Test
+	public void anyTagDifferentTagDifferentMessages() {
+		Commit logEntry1 = newLogEntry("1", "author 1", "date 1", "[anyTag][PROJ-1] message 1", asList(myClass1()));
+
+		Commit logEntry2 = newLogEntry("2", "author 2", "date 2", "[anyTag][PROJ-2] message 2", asList(myClass1()));
+		
+		List<Commit> source = Arrays.asList(logEntry1);
+		List<Commit> target = Arrays.asList(logEntry2);
+		
+		SVNTreeComparator comparator = new SVNTreeComparator(source);
+		SVNTreeComparatorResult result = comparator.compare(target);
+		
+		assertThat(result.areEquals(), is(false));
+		assertThat(result.commitsOnlyOnSource().isEmpty(), is(false));
+	}
+
 	
 	private Commit newLogEntry(String revision, String author, String date, String message) {
 		Commit logEntry = new Commit();
