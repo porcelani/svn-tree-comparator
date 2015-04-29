@@ -25,8 +25,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1, logEntry2, logEntry3);
 		List<Commit> target = Arrays.asList(logEntry4, logEntry5, logEntry6);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);
 		
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
@@ -45,8 +44,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1, logEntry2, logEntry3);
 		List<Commit> target = Arrays.asList(logEntry4, logEntry5, logEntry6);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(target, source);
 		
 		assertThat(result.areEquals(), is(false));
 		assertThat(result.commitsOnlyOnSource().size(), equalTo(1));
@@ -62,8 +60,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);;
 		
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
@@ -79,8 +76,7 @@ public class SVNTreeComparatorTest {
 		
 		List<Commit> target = Arrays.asList(logEntry2);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(target, source);
 		
 		assertThat(result.areEquals(), is(false));
 		assertThat(result.commitsOnlyOnSource().size(), equalTo(1));
@@ -96,8 +92,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2, logEntry3);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);
 		
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
@@ -113,8 +108,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);
 		
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
@@ -130,8 +124,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1,logEntry2);
 		List<Commit> target = Arrays.asList(logEntry3);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);
 		
 		assertThat(result.areEquals(), is(true));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(true));
@@ -146,8 +139,7 @@ public class SVNTreeComparatorTest {
 		List<Commit> source = Arrays.asList(logEntry1);
 		List<Commit> target = Arrays.asList(logEntry2);
 		
-		SVNTreeComparator comparator = new SVNTreeComparator(source);
-		SVNTreeComparatorResult result = comparator.compare(target);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(source, target);
 		
 		assertThat(result.areEquals(), is(false));
 		assertThat(result.commitsOnlyOnSource().isEmpty(), is(false));

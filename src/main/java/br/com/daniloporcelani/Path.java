@@ -68,6 +68,8 @@ public class Path {
 	public String getFileName() {
 		int lastSlash = path.lastIndexOf('/');
 		int lastDot = path.lastIndexOf('.');
+		if (lastSlash > lastDot)
+			return path;
 		return path.substring(lastSlash, lastDot);
 	}
 

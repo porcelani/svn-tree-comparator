@@ -12,8 +12,8 @@ public class Main {
 	private String svnUrl;
 	private String user;
 	private String password;
-	private SVNProperty target;
-	private List<SVNProperty> sources = new ArrayList<SVNProperty>();
+	private SVNProperty old;
+	private List<SVNProperty> news = new ArrayList<SVNProperty>();
 
 	public static void main(String[] args) {
 		new Main();
@@ -29,51 +29,49 @@ public class Main {
 			user = prop.getProperty("svnUser");
 			password = prop.getProperty("svnPassword");
 			
-			target = newSVNProperty(prop.getProperty("target"));
+			old = newSVNProperty(prop.getProperty("old"));
 			
-			for(String source : prop.getProperty("sources").split(";"))
-				sources.add(newSVNProperty(source));
+			for(String source : prop.getProperty("new").split(";"))
+				news.add(newSVNProperty(source));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		String xml = comando(target.getUrl(), target.getStartDate(), target.getEnd());
-		SVNLog svnLogTarget = MarshallUtils.unmarshall(SVNLog.class, xml);
+		String xmlOld = comando(old.getUrl(), old.getStartDate(), old.getEnd());
+		SVNLog svnLogOld = MarshallUtils.unmarshall(SVNLog.class, xmlOld);
 		
-		SVNTreeComparator svnTreeComparator = new SVNTreeComparator(svnLogTarget.getCommits());
-		
-		List<Commit> sourceCommits = new ArrayList<Commit>();
-		for(SVNProperty p : sources) {
-			xml = comando(p.getUrl(), p.getStartDate(), p.getEnd());
-			SVNLog svnLogSource = MarshallUtils.unmarshall(SVNLog.class, xml);
+		List<Commit> newCommits = new ArrayList<Commit>();
+		for(SVNProperty p : news) {
+			String xmlNew = comando(p.getUrl(), p.getStartDate(), p.getEnd());
+			SVNLog svnLogSource = MarshallUtils.unmarshall(SVNLog.class, xmlNew);
 			
-			sourceCommits.addAll(svnLogSource.getCommits());
+			newCommits.addAll(svnLogSource.getCommits());
 		}
 		
-		svnTreeComparator.compare(sourceCommits);
+		SVNTreeComparatorResult result = SVNTreeComparator.compare(svnLogOld.getCommits(), newCommits);
+		System.out.println(result);
 	}
 
 	private SVNProperty newSVNProperty(String property) {
 		SVNProperty p = new SVNProperty();
-		p.setUrl(property.split(",")[0]);
-		p.setStartDate(property.split(",")[1]);
-		p.setEnd(property.split(",")[2]);
+		p.setUrl(property.split(",")[0].trim());
+		p.setStartDate(property.split(",")[1].trim());
+		p.setEnd(property.split(",")[2].trim());
 		
 		return p;
 	}
 
-	public String comando(String branch, String data_inicio, String data_fim) {
-		String comandoPadrao = "svn log %s/%s -v -r {%s}:%s --username %s --password %s --xml";
-		return String.format(comandoPadrao, svnUrl, branch, data_inicio,
-				chaves(data_fim), user, password);
+	public String comando(String branch, String startDate, String endDate) {
+		String comandoPadrao = "svn log %s/%s -v -r %s:%s --username %s --password %s --xml";
+		return executaComando(String.format(comandoPadrao, svnUrl, branch, toDate(startDate), toDate(endDate), user, password));
 	}
 
-	public String chaves(String data) {
-		if (data.equals("HEAD"))
-			return data;
-		else
-			return "{" + data + "}";
+	public String toDate(String date) {
+		if (date.equals("HEAD"))
+			return date;
+
+		return "{" + date + "}";
 	}
 
 	public String executaComando(String comando) {
@@ -82,7 +80,7 @@ public class Main {
 		try {
 			Process p = r.exec(comando);
 
-			Scanner scanner = new Scanner(p.getInputStream(), "ISO-8859-1");
+			Scanner scanner = new Scanner(p.getInputStream(), "UTF-8");
 			return scanner.useDelimiter("$$").next();
 		} catch (IOException e) {
 			e.printStackTrace();

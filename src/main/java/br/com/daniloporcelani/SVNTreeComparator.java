@@ -7,21 +7,15 @@ import java.util.regex.Pattern;
 
 public class SVNTreeComparator {
 
-	private final List<Commit> source;
+	public static SVNTreeComparatorResult compare(List<Commit> old, List<Commit> _new) {
+		List<Commit> commitsOnlyOnSource = new ArrayList<Commit>(old);
 
-	public SVNTreeComparator(List<Commit> source) {
-		this.source = source;
-	}
-
-	public SVNTreeComparatorResult compare(List<Commit> target) {
-		List<Commit> commitsOnlyOnSource = new ArrayList<Commit>(source);
-
-		for (Commit c : source)
+		for (Commit c : old)
 			if (c.getAuthor().equals("builder"))
 				commitsOnlyOnSource.remove(c);
 
 		
-		for (Commit t : target)
+		for (Commit t : _new)
 			for (Commit c : commitsOnlyOnSource)
 				if (t.getMessage().equals(c.getMessage())) {
 					commitsOnlyOnSource.remove(c);
@@ -29,7 +23,7 @@ public class SVNTreeComparator {
 				}
 
 		
-		for (Commit t : target)
+		for (Commit t : _new)
 			for (Commit c : commitsOnlyOnSource) 
 				if (hasSameTag(t, c) && pathEquals(t, c)) {
 					commitsOnlyOnSource.remove(c);
@@ -37,14 +31,14 @@ public class SVNTreeComparator {
 				}
 			
 		
-		for (Commit t : target){
+		for (Commit t : _new){
 			List<Commit> listTarget = new ArrayList<Commit>();
 			List<Commit> listSource = new ArrayList<Commit>();
 			
 			List<Path> pathTarget = new ArrayList<Path>();
 			List<Path> pathSource = new ArrayList<Path>();
 
-			for (Commit commit : target) 
+			for (Commit commit : _new) 
 				if(hasSameTag(t,commit))
 					listTarget.add(commit);
 			
@@ -67,14 +61,14 @@ public class SVNTreeComparator {
 		return new SVNTreeComparatorResult(commitsOnlyOnSource);
 	}
 
-	private boolean hasSameTag(Commit t, Commit c) {
+	private static boolean hasSameTag(Commit t, Commit c) {
 		String tagT=getTag(t);
 		String tagC=getTag(c);
 
-		return tagT.equals(tagC);
+		return tagT == null || tagC == null ? false : tagT.equals(tagC);
 	}
 
-	private String getTag(Commit t) {
+	private static String getTag(Commit t) {
 		String message = t.getMessage();
 		
 		String oneOrMoreCaracter = "\\S+";
@@ -82,12 +76,12 @@ public class SVNTreeComparator {
 		Matcher matcher = Pattern.compile("\\["+oneOrMoreCaracter+"-"+oneOrMoreNumber+"\\]").matcher(message);
 		
 		if(!matcher.find())
-			throw new RuntimeException("The menssage need a Tag");
+			return null;
 	
 		return matcher.group();
 	}
 
-	private boolean pathEquals(Commit t, Commit c) {
+	private static boolean pathEquals(Commit t, Commit c) {
 		List<String> pathsC = new ArrayList<String>();
 		List<String> pathsT = new ArrayList<String>();
 
@@ -100,7 +94,7 @@ public class SVNTreeComparator {
 		return pathsT.containsAll(pathsC) && pathsT.size() == pathsC.size();
 	}
 
-	private boolean pathEquals(List<Path> t, List<Path> c) {
+	private static boolean pathEquals(List<Path> t, List<Path> c) {
 		List<String> pathsC = new ArrayList<String>();
 		List<String> pathsT = new ArrayList<String>();
 		
