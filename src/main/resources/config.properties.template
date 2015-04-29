@@ -1,0 +1,5 @@
+svnUrl=https://svn/url
+svnUser=user
+svnPassword=password
+target=trunk, 2015-01-01, HEAD
+sources=branches/0.0.1, 2015-01-01, HEAD;branches/0.0.1, 2015-01-01, HEAD 

@@ -7,19 +7,21 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class CommitTest {
+public class SVNLogTest {
 
 	String expected =
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-			+ "<logentry revision=\"1\">\n"
-			+ "    <author>someone</author>\n"
-			+ "    <date>2014-12-29T16:07:09.712879Z</date>\n"
-			+ "    <msg>first commit</msg>\n"
-			+ "    <paths>\n"
-			+ "        <path text-mods=\"true\" prop-mods=\"false\" kind=\"file\" action=\"M\">/Class1.java</path>\n"
-			+ "        <path text-mods=\"true\" prop-mods=\"false\" kind=\"file\" action=\"M\">/Class2.java</path>\n"
-			+ "    </paths>\n"
-			+ "</logentry>\n";
+			+ "<log>\n"
+			+ "    <logentry revision=\"1\">\n"
+			+ "        <author>someone</author>\n"
+			+ "        <date>2014-12-29T16:07:09.712879Z</date>\n"
+			+ "        <msg>first commit</msg>\n"
+			+ "        <paths>\n"
+			+ "            <path text-mods=\"true\" prop-mods=\"false\" kind=\"file\" action=\"M\">/Class1.java</path>\n"
+			+ "            <path text-mods=\"true\" prop-mods=\"false\" kind=\"file\" action=\"M\">/Class2.java</path>\n"
+			+ "        </paths>\n"
+			+ "    </logentry>\n"
+			+ "</log>\n";
 
 	@Test
 	public void marshall() {
@@ -37,21 +39,26 @@ public class CommitTest {
 		path2.setTextMods("true");
 		path2.setPath("/Class2.java");
 		
-		Commit subject = new Commit();
-		subject.setRevision("1");
-		subject.setAuthor("someone");
-		subject.setDate("2014-12-29T16:07:09.712879Z");
-		subject.setMessage("first commit");
-		subject.setPaths(Arrays.asList(path1, path2));
+		Commit commit = new Commit();
+		commit.setRevision("1");
+		commit.setAuthor("someone");
+		commit.setDate("2014-12-29T16:07:09.712879Z");
+		commit.setMessage("first commit");
+		commit.setPaths(Arrays.asList(path1, path2));
 		
-		String out = MarshallUtils.marshall(Commit.class, subject);
+		SVNLog log = new SVNLog();
+		log.setCommits(Arrays.asList(commit));
+		
+		String out = MarshallUtils.marshall(SVNLog.class, log);
 		assertThat(out, equalTo(expected));
 	}
 	
 	@Test
 	public void unmarshall() {
-		Commit logEntry = MarshallUtils.unmarshall(Commit.class, expected);
+		SVNLog log = MarshallUtils.unmarshall(SVNLog.class, expected);
+		assertThat(log.getCommits().size(), equalTo(1));
 		
+		Commit logEntry = log.getCommits().get(0);
 		assertThat(logEntry.getRevision(), equalTo("1"));
 		assertThat(logEntry.getAuthor(), equalTo("someone"));
 		assertThat(logEntry.getDate(), equalTo("2014-12-29T16:07:09.712879Z"));
